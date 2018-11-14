@@ -27,6 +27,14 @@ void outHello()
 
 int main()
 {
+    putString("there are 0x");
+    unsigned short memoryCanUse = *(unsigned short*)(0x500);
+    printUnsignedShort(memoryCanUse);
+    putString(" * 1KB can use.\r\n");
+
+    return 0;
+
+
     static unsigned int *count = ((int*) 0x50000);
     putString("count = "); printUnsignedInt(*count); putString("\r\n");
     if(*count > 0) {
