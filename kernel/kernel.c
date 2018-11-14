@@ -20,6 +20,11 @@ void INTERRUPT_GATE_INIT(struct INTERRUPT_GATE *address, unsigned int offset)
     address->OFFSET_16_31 = (offset & 0xffff0000) >> 16;
 }
 
+void outHello()
+{
+    putString("hello, world");
+}
+
 int main()
 {
     static unsigned int *count = ((int*) 0x50000);
@@ -36,7 +41,7 @@ int main()
 
     struct TABLE_Location idt_table;
     putString("idtr table address:0x");
-    printUnsignedInt((unsigned int*)&idt_table);
+    printUnsignedInt((unsigned int)&idt_table);
     putString("\r\n");
     idt_table.LIMIT = 0xffff;
     idt_table.BASE_0_15 = (int)table & 0x0000ffff;
@@ -46,10 +51,13 @@ int main()
     LIDT((unsigned int*)&idt_table);
 
     struct INTERRUPT_GATE test;
-    INTERRUPT_GATE_INIT(&test, 0x1000);
+    INTERRUPT_GATE_INIT(&test, (unsigned int) &outHello);
+    // *(unsigned short *) (0x100000) = 0x00cf; // this code mean iret
     // print_INTERRUPT_GATE(&(table[0]));
     IDT_SET_GATE(table, 255, &test);
-    INT255();
+    INT(255);
+
+    putString("after use INT 255.\r\n");
 
     return 0;
 }
