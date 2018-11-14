@@ -40,6 +40,4 @@ void SIDT(unsigned int *address)
     );
 }
 
-#define IRET()     {__asm__("IRET\n\t");}
-#define INT0()     {__asm__("INT $0\n\t");}
-#define INT255()   {__asm__("INT $255\n\t");}
+#define INT(number) {__asm__("INT $"#number);}
