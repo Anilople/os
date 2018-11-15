@@ -38,12 +38,6 @@ void pagingUsing()
     memcpy(pagingStringAddress, (void*)msgPaging, sizeof(msgPaging));
     struct PDE *PDE_begin = (struct PDE *)0x100000;
     struct PTE *PTE_begin = (struct PTE *) (PDE_begin + 1024);
-    // putString("Page Directory Entry:0x");
-    // printUnsignedInt(PDE_begin);
-    // putString("\r\n");
-    // putString("Page Table Entry:0x");
-    // printUnsignedInt(PTE_begin);
-    // putString("\r\n");
     // PDE 0
     struct PDE pde_zero;
     PDE_init(&pde_zero, (unsigned int *)PTE_begin);
@@ -64,24 +58,6 @@ void pagingUsing()
     putString("now, set page directory base.\r\n");
     PDBR_set((unsigned int *)PDE_begin);
     putString("now, open paging.\r\n");
-    __asm__(
-        "movl %%cr0, %%eax\n\t"
-        "orl  $0x80000000, %%eax\n\t"
-        "movl %%eax, %%cr0\n\t"
-        :
-        :
-    );
-    putChar('h');
-    putChar('e');
-    putChar('i');
-    putChar('\r');
-    putChar('\n');
-
-    putString("now try pring msg in 0x200000.\r\n");
-    putString((char *) 0);
-    __asm__("cli");
-    __asm__("hlt");
-
 }
 
 int main()
@@ -93,15 +69,10 @@ int main()
 
     // Paging
     pagingUsing();
-    // open paging
-    // __asm__(
-    //     "movl %%cr0, %%eax\n\t"
-    //     "orl  $0x80000000, %%eax\n\t"
-    //     "movl %%eax, %%cr0\n\t"
-    //     :
-    //     :
-    // );
-
+    openPaging();
+    putString("now try pring msg in 0x200000.\r\n");
+    putString((char *) 0);
+    __asm__("hlt");
     
 
 
