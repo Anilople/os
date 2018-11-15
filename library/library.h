@@ -1,4 +1,4 @@
-
+#pragma once
 /*
     suppose destination address < source address
 */

@@ -4,8 +4,8 @@
 */
 void memcpy(void *destination, const void *source, int size)
 {
-    unsigned char *destinationNow = (char *) destination;
-    unsigned char *sourceNow = (char *) source;
+    char *destinationNow = (char *) destination;
+    char *sourceNow = (char *) source;
     while(size > 0) {
         *destinationNow = *sourceNow;
         destinationNow++;

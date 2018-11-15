@@ -1,4 +1,4 @@
-#include "ports.h"
+#include "../port/port.h"
 #include "../screen/screen.h"
 /*
 https://wiki.osdev.org/ATA_read/write_sectors
@@ -89,7 +89,7 @@ void LBA_write_disk_sector(unsigned short *addressBegin, int start, unsigned cha
 
     // 开始将数据写入硬盘, 从0x1f0端口中, 每次写入 16 bits
     int dataNumbers = sectorNumbers * 256; // 总共要写入多少次 16 bits
-    unsigned short dataFromDisk;
+    
     for(int i = 0; i < dataNumbers; i++) {
         port_word_out(0x1f0, addressBegin[i]);
     }

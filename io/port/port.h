@@ -1,3 +1,4 @@
+#pragma once
 // in al, dx
 unsigned char port_byte_in(unsigned short port);
 

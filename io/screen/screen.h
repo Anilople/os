@@ -1,3 +1,4 @@
+#pragma once
 /*
     infomation from 《x86汇编语言:从实模式到保护模式》, page 154, 光标
 */

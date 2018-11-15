@@ -1,5 +1,5 @@
-#include "../drivers/ports.h"
-#include "../library/library.h"
+#include "../port/port.h"
+#include "../../library/library.h"
 
 #define CURSORROW       25 // 25 rows in a screen
 #define CURSORCOLUMN    80 // 80 columns in a screen

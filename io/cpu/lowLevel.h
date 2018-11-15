@@ -1,13 +1,5 @@
-unsigned short getCS()
-{
-    unsigned short CS;
-    __asm__(
-        "movw %%cs, %%ax"
-        :"=a"(CS) // output
-        :
-    );
-    return CS;
-}
+#pragma once
+unsigned short getCS();
 
 /*
     https://wiki.osdev.org/Interrupt_Descriptor_Table
@@ -22,22 +14,11 @@ unsigned short getCS()
     because c programming language have memory align,
     for increse the efficiency.
 */
-void LIDT(unsigned int *address)
-{
-    __asm__(
-        "LIDT (%%eax)"
-        : // output
-        : "a"(address) // input
-    );
-}
+void LIDT(unsigned int *address);
 
-void SIDT(unsigned int *address)
-{
-    __asm__(
-        "SIDT (%%eax)"
-        : // output
-        : "a"(address) // input
-    );
-}
+void SIDT(unsigned int *address);
 
+/*
+    INT(255) -> {__asm__("INT $""255");} -> {__asm__("INT $255");}
+*/
 #define INT(number) {__asm__("INT $"#number);}

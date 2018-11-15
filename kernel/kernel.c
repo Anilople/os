@@ -1,9 +1,7 @@
-// #include "low_level.h"
-#include "paging.h"
-// #include "descriptors.h"
-#include "../drivers/ports.h"
-#include "../drivers/disk.h"
-#include "../screen/screen.h"
+#include "../io/cpu/paging.h"
+#include "../io/port/port.h"
+#include "../io/screen/screen.h"
+#include "../io/disk/disk.h"
 #include "../library/library.h"
 
 // #define IDT_SATRT_ADDRESS ((unsigned int*) 0x10000)
@@ -29,10 +27,10 @@ void outHello()
 void pagingUsing()
 {
     putString("function putString address:0x");
-    printUnsignedInt(&putString);
+    printUnsignedInt((unsigned int)&putString);
     putString("\r\n");
     putString("function putChar address:0x");
-    printUnsignedInt(&putChar);
+    printUnsignedInt((unsigned int)&putChar);
     putString("\r\n");    
     // string to check
     char msgPaging[] = "wow, you open paging success.\r\n";
@@ -48,7 +46,7 @@ void pagingUsing()
     // putString("\r\n");
     // PDE 0
     struct PDE pde_zero;
-    PDE_init(&pde_zero, PTE_begin);
+    PDE_init(&pde_zero, (unsigned int *)PTE_begin);
     PDE_set(PDE_begin, 0, &pde_zero);
     // PTE 0
     struct PTE pte_one;
@@ -64,7 +62,7 @@ void pagingUsing()
     PTE_set(PTE_begin, 0xb8, &pte_forVedioRam);
     // 
     putString("now, set page directory base.\r\n");
-    PDBR_set(PDE_begin);
+    PDBR_set((unsigned int *)PDE_begin);
     putString("now, open paging.\r\n");
     __asm__(
         "movl %%cr0, %%eax\n\t"
