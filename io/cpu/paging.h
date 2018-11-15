@@ -67,5 +67,16 @@ void PDBR_set(unsigned int *address);
 /*
     PG is a bit in cr0 register(position 31)
     let PG = 1
+
+    can not use function here
 */
-void openPaging();
+#define openPaging() \
+    __asm__( \
+        "movl %%cr0, %%eax\n\t" \
+        "orl  $0x80000000, %%eax\n\t" \
+        "movl %%eax, %%cr0\n\t" \
+        : \
+        : \
+        : "eax" \
+    )
+
