@@ -1,5 +1,5 @@
 #include "../../screen/screen.h"
-
+#include "../../port/port.h"
 /*
     do not use int
     watch out memory align
@@ -82,19 +82,40 @@ static struct INTERRUPT_GATE INTERRUPT_GATE_get(unsigned short selector, unsigne
     return gate;
 }
 
+// emulate iret in c
+#define EMULATE_IRET() __asm__("leave\n\t""iret\n\t"::)
+
 // __attribute__((interrupt)) // it is not work
 static void divideError()
 {
     static char name[] = "divide error.\r\n";
     putString(name);
 
-    // 
-    __asm__(
-        "leave\n\t"
-        "iret"
-        :
-        :
-    );
+    EMULATE_IRET();
+}
+
+/*
+    clock
+*/
+static void IRQ0()
+{
+    putString("IRQ0 tick 0x");
+    static unsigned int count = 0;
+    printUnsignedInt(count);
+    count++;
+    putString("\r\n");
+    port_byte_out(0x20, 0b00100000); // end interrupt
+    
+    EMULATE_IRET();
+}
+
+/*
+    keyboard
+*/
+static void IRQ1()
+{
+
+    EMULATE_IRET();
 }
 
 /*
@@ -145,7 +166,8 @@ void IDT_init(unsigned int *base, unsigned short limit)
     forLIDT.BASE_16_31 = (unsigned short) ((unsigned int)base >> 16);
     LIDT(&forLIDT);
 
+    unsigned short gateSelector = 0b1000;
     // install interrupt gate
-    struct INTERRUPT_GATE gate0 = INTERRUPT_GATE_get(0b1000, (unsigned int) &divideError);
+    struct INTERRUPT_GATE gate0 = INTERRUPT_GATE_get(gateSelector, (unsigned int) &divideError);
     IDT_SET_GATE((struct INTERRUPT_GATE *) base, 0, &gate0);
 }

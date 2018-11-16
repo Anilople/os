@@ -79,6 +79,12 @@ int main()
     IDT_init((unsigned int*) 0x10000, 0xffff);
     INT(0);
     putString("here, here");
+
+    putString("now, test IR0 in 0x20\r\n");
+    __asm__("sti"); // enable interrupt
+    while(1) {
+        __asm__("hlt");
+    }
     // static unsigned int *count = ((int*) 0x50000);
     // putString("count = "); printUnsignedInt(*count); putString("\r\n");
     // if(*count > 0) {
