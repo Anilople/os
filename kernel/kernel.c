@@ -1,8 +1,4 @@
-#include "../io/cpu/cpu.h"
-#include "../io/port/port.h"
-#include "../io/screen/screen.h"
-#include "../io/disk/disk.h"
-#include "../io/8259A/8259A.h"
+#include "../io/io.h"
 #include "../library/library.h"
 
 // #define IDT_SATRT_ADDRESS ((unsigned int*) 0x10000)

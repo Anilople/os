@@ -52,17 +52,17 @@ struct INTERRUPT_GATE {
     unsigned short OFFSET_16_31;
 };
 
-static void print_INTERRUPT_GATE(struct INTERRUPT_GATE *address)
-{
-    int *testAddr = (int *) address;
-    putString("IDT 0~15:0x");
-    printUnsignedInt(*testAddr);
-    putString("   ---   ");
+// static void print_INTERRUPT_GATE(struct INTERRUPT_GATE *address)
+// {
+//     int *testAddr = (int *) address;
+//     putString("IDT 0~15:0x");
+//     printUnsignedInt(*testAddr);
+//     putString("   ---   ");
 
-    putString("IDT 16~31:0x");
-    printUnsignedInt(*(testAddr + 1));
-    putString("\r\n");
-}
+//     putString("IDT 16~31:0x");
+//     printUnsignedInt(*(testAddr + 1));
+//     putString("\r\n");
+// }
 
 static struct INTERRUPT_GATE INTERRUPT_GATE_get(unsigned short selector, unsigned int offset)
 {
@@ -106,15 +106,6 @@ static void IRQ0()
     putString("\r\n");
     port_byte_out(0x20, 0b00100000); // end interrupt
     
-    EMULATE_IRET();
-}
-
-/*
-    keyboard
-*/
-static void IRQ1()
-{
-
     EMULATE_IRET();
 }
 
@@ -170,4 +161,7 @@ void IDT_init(unsigned int *base, unsigned short limit)
     // install interrupt gate
     struct INTERRUPT_GATE gate0 = INTERRUPT_GATE_get(gateSelector, (unsigned int) &divideError);
     IDT_SET_GATE((struct INTERRUPT_GATE *) base, 0, &gate0);
+
+    struct INTERRUPT_GATE gateIRQ0 = INTERRUPT_GATE_get(gateSelector, (unsigned int) &IRQ0);
+    IDT_SET_GATE((struct INTERRUPT_GATE *) base, 0x20, &gateIRQ0);
 }
