@@ -1,7 +1,8 @@
-#include "../io/cpu/paging.h"
+#include "../io/cpu/cpu.h"
 #include "../io/port/port.h"
 #include "../io/screen/screen.h"
 #include "../io/disk/disk.h"
+#include "../io/8259A/8259A.h"
 #include "../library/library.h"
 
 // #define IDT_SATRT_ADDRESS ((unsigned int*) 0x10000)
@@ -68,14 +69,16 @@ int main()
     // putString(" * 1KB can use.\r\n");
 
     // Paging
-    pagingUsing();
-    openPaging();
-    putString("now try pring msg in 0x200000.\r\n");
-    putString((char *) 0);
-    __asm__("hlt");
+    // pagingUsing();
+    // openPaging();
+    // putString("now try pring msg in 0x200000.\r\n");
+    // putString((char *) 0);
+    // __asm__("hlt");
     
-
-
+    _8259A_init();
+    IDT_init((unsigned int*) 0x10000, 0xffff);
+    INT(0);
+    putString("here, here");
     // static unsigned int *count = ((int*) 0x50000);
     // putString("count = "); printUnsignedInt(*count); putString("\r\n");
     // if(*count > 0) {

@@ -38,18 +38,25 @@ cpuDirectory := io/cpu
 $(cpuDirectory)/lowLevel.o : $(cpuDirectory)/lowLevel.c $(cpuDirectory)/lowLevel.h
 	gcc $< -o $@ $(CFLAGS)
 # descriptors, include GDT LDT IDT etc.
-$(cpuDirectory)/descriptors.o : $(cpuDirectory)/descriptors.c $(cpuDirectory)/descriptors.h
+# IDT
+idtDirectory := $(cpuDirectory)/descriptors
+$(idtDirectory)/idt.o : $(idtDirectory)/idt.c $(idtDirectory)/idt.h
 	gcc $< -o $@ $(CFLAGS)
 # paging
 $(cpuDirectory)/paging.o : $(cpuDirectory)/paging.c $(cpuDirectory)/paging.h
 	gcc $< -o $@ $(CFLAGS)
 # all object file to cpu.o, "-r" mean keep the symbols
-$(cpuDirectory)/cpu.o : $(cpuDirectory)/lowLevel.o $(cpuDirectory)/descriptors.o $(cpuDirectory)/paging.o
+$(cpuDirectory)/cpu.o : $(cpuDirectory)/lowLevel.o $(idtDirectory)/idt.o $(cpuDirectory)/paging.o
 	ld $^ -o $@ -r
+#############################
+# 8259A
+PICDirectory := io/8259A
+$(PICDirectory)/8259A.o : $(PICDirectory)/8259A.c $(PICDirectory)/8259A.h
+	gcc $< -o $@ $(CFLAGS)
 #############################
 # generate io.o
 ioDirectory := io
-$(ioDirectory)/io.o : $(portDirectory)/port.o $(screenDirectory)/screen.o $(diskDirectory)/disk.o $(cpuDirectory)/cpu.o
+$(ioDirectory)/io.o : $(portDirectory)/port.o $(screenDirectory)/screen.o $(diskDirectory)/disk.o $(cpuDirectory)/cpu.o $(PICDirectory)/8259A.o
 	ld $^ -o $@ -r
 ###########################################################
 # library
