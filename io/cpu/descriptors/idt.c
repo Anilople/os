@@ -99,13 +99,30 @@ static void divideError()
 */
 static void IRQ0()
 {
-    putString("IRQ0 tick 0x");
-    static unsigned int count = 0;
-    printUnsignedInt(count);
-    count++;
-    putString("\r\n");
+    // putString("IRQ0 tick 0x");
+    // static unsigned int count = 0;
+    // printUnsignedInt(count);
+    // count++;
+    // putString("\r\n");
     port_byte_out(0x20, 0b00100000); // end interrupt
     
+    EMULATE_IRET();
+}
+
+/*
+    keyboard
+
+    0x60 : read write buffer
+    0x64 : get register status or send command
+*/
+static void IRQ1()
+{
+    unsigned char code = port_byte_in(0x60);
+    putString("scan code:0x");
+    printUnsignedChar(code);
+    putString("\r\n");
+    
+    port_byte_out(0x20, 0b00100000); // end interrupt
     EMULATE_IRET();
 }
 
@@ -164,4 +181,7 @@ void IDT_init(unsigned int *base, unsigned short limit)
 
     struct INTERRUPT_GATE gateIRQ0 = INTERRUPT_GATE_get(gateSelector, (unsigned int) &IRQ0);
     IDT_SET_GATE((struct INTERRUPT_GATE *) base, 0x20, &gateIRQ0);
+
+    struct INTERRUPT_GATE gateIRQ1 = INTERRUPT_GATE_get(gateSelector, (unsigned int) &IRQ1);
+    IDT_SET_GATE((struct INTERRUPT_GATE *) base, 0x21, &gateIRQ1);
 }

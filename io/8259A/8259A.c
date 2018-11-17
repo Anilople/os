@@ -137,7 +137,6 @@ void _8259A_init()
     putString("ICW1~4 finished.\r\n");
     //  OCW1
     putString("just open IR0.\r\n");
-    port_byte_out(PIC_MASTER_DATA, 0b11111110); // just open IR0 in master
+    port_byte_out(PIC_MASTER_DATA, 0b11111100); // just open IR0 in master
     port_byte_out(PIC_SLAVE_DATA, 0xff); // close all IR in slave
-
 }
