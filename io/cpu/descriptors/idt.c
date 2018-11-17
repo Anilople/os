@@ -1,5 +1,6 @@
 #include "../../screen/screen.h"
 #include "../../port/port.h"
+#include "../../keyboard/keyboard.h"
 /*
     do not use int
     watch out memory align
@@ -117,10 +118,12 @@ static void IRQ0()
 */
 static void IRQ1()
 {
-    unsigned char code = port_byte_in(0x60);
-    putString("scan code:0x");
-    printUnsignedChar(code);
-    putString("\r\n");
+    unsigned char scancode = port_byte_in(0x60);
+    pushKeyboardScancode(scancode);
+
+    // putString("\r\nscan code:0x");
+    // printUnsignedChar(scancode);
+    // putString("\r\n");
     
     port_byte_out(0x20, 0b00100000); // end interrupt
     EMULATE_IRET();

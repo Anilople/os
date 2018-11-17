@@ -76,10 +76,16 @@ int main()
     INT(0);
     putString("here, here");
 
-    putString("now, test IR0 in 0x20\r\n");
+    putString("now, test keyboard input\r\n");
     __asm__("sti"); // enable interrupt
     while(1) {
-        __asm__("hlt");
+        // __asm__("hlt");
+        char c = getChar();
+        if('\n' != c) {
+            putChar(c);
+        } else {
+            putString("\r\n");
+        }
     }
     // static unsigned int *count = ((int*) 0x50000);
     // putString("count = "); printUnsignedInt(*count); putString("\r\n");

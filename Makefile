@@ -54,9 +54,14 @@ PICDirectory := io/8259A
 $(PICDirectory)/8259A.o : $(PICDirectory)/8259A.c $(PICDirectory)/8259A.h
 	gcc $< -o $@ $(CFLAGS)
 #############################
+# keyboard
+keyboardDirectory := io/keyboard
+$(keyboardDirectory)/keyboard.o : $(keyboardDirectory)/keyboard.c $(keyboardDirectory)/keyboard.h
+	gcc $< -o $@ $(CFLAGS)
+#############################
 # generate io.o
 ioDirectory := io
-$(ioDirectory)/io.o : $(portDirectory)/port.o $(screenDirectory)/screen.o $(diskDirectory)/disk.o $(cpuDirectory)/cpu.o $(PICDirectory)/8259A.o
+$(ioDirectory)/io.o : $(portDirectory)/port.o $(screenDirectory)/screen.o $(diskDirectory)/disk.o $(cpuDirectory)/cpu.o $(PICDirectory)/8259A.o $(keyboardDirectory)/keyboard.o
 	ld $^ -o $@ -r
 ###########################################################
 # library

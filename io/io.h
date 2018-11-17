@@ -5,3 +5,4 @@
 #include "disk/disk.h"
 #include "8259A/8259A.h"
 #include "cpu/cpu.h"
+#include "keyboard/keyboard.h"
