@@ -135,8 +135,18 @@ void _8259A_init()
 {
     _8259A_init_ICW();
     putString("ICW1~4 finished.\r\n");
+
     //  OCW1
-    putString("just open IR0.\r\n");
-    port_byte_out(PIC_MASTER_DATA, 0b11111100); // just open IR0 in master
-    port_byte_out(PIC_SLAVE_DATA, 0xff); // close all IR in slave
+    //      master
+    putString("master open IR0~7  status:0x");
+    unsigned char IR0_7 = 0b11111100;
+    printUnsignedChar(IR0_7);
+    putString("\r\n");
+    port_byte_out(PIC_MASTER_DATA, IR0_7);
+    //      slave
+    putString("master open IR8~15 status:0x");
+    unsigned char IR8_15 = 0xff;
+    printUnsignedChar(IR8_15);
+    putString("\r\n");
+    port_byte_out(PIC_SLAVE_DATA, IR8_15);
 }
